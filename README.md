@@ -1,4 +1,4 @@
-# BotBitsExt.Rounds
+# BotBitsExt.Rounds [![Build status](https://ci.appveyor.com/api/projects/status/6343pau314ku0xy1?svg=true)](https://ci.appveyor.com/project/Tunous/botbitsext-rounds)
 
 A BotBits extension that allows you to integrate automatic rounds management with your bots.
 
