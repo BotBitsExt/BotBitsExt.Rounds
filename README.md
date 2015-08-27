@@ -42,12 +42,15 @@ void OnStartingRound(StartingRoundEvent e)
 }
 ```
 
-`RoundStartFailedEvent` is sent when start fails during the preparation time (`waitTime` which you set when loading `RoundsExtension`). Here is an example of how to use it to inform about missing players:
+`RoundStartFailedEvent` is sent when start fails during the preparation time (`waitTime` which you set when loading `RoundsExtension`). It contains `EnoughPlayers` property which is set to false when there weren't enough players to continue starting new round. Here is an example of how to use it to inform about missing players:
 
 ```csharp
 [EventListener]
 void OnStartFailed(RoundStartFailedEvent e)
 {
-    Chat.Of(BotBits).Say("Not enough players to start new round. Waiting for more...");
+    if (!e.EnoughPlayers)
+        Chat.Of(BotBits).Say("Not enough players to start new round. Waiting for more...");
 }
 ```
+
+The `EnoughPlayers` property is set to true when round start was stopped by !stop command or other player action. Otherwise the event is sent because of missing players.

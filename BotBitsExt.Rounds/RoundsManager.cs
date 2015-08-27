@@ -116,7 +116,7 @@ namespace BotBitsExt.Rounds
                     catch (TaskCanceledException)
                     {
                         // Notify about start fail
-                        new RoundStartFailedEvent().RaiseIn(BotBits);
+                        new RoundStartFailedEvent(players.Potential.Length >= MinimumPlayers).RaiseIn(BotBits);
                         return;
                     }
                     finally
@@ -150,9 +150,15 @@ namespace BotBitsExt.Rounds
         {
             if (!Running)
             {
-                // Cancel starting round
-                cts.Cancel();
-                cts = new CancellationTokenSource();
+                if (Starting)
+                {
+                    // Cancel starting round
+                    cts.Cancel();
+                    cts = new CancellationTokenSource();
+
+                    if (restart)
+                        CheckGameStart();
+                }
 
                 return;
             }
