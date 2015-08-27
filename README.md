@@ -26,8 +26,28 @@ void OnJoinComplete(JoinCompleteEvent e)
 }
 ```
 
-And then the last part required is to send `FinishRoundEvent` each time when round ends. If you didn't do it rounds would only end after number of playing players decreased under required minimum.
+And then the last part required is to use `RoundsManager.Of(BotBits).ForceStop()` each time when round ends. If you don't do it rounds would only end after number of playing players decreased under required minimum.
+
+# Additional events
+
+In addition you can listen to `StartingRoundEvent` and `RoundStartFailedEvent` to preform custom actions.
+
+`StartingRoundEvent` is sent each time when new round is starting. It provides time telling for how long bot will wait before starting new round. You can use it to inform players about new round or preform preparation tasks.
 
 ```csharp
-new FinishRoundEvent().RaiseIn(BotBits);
+[EventListener]
+void OnStartingRound(StartingRoundEvent e)
+{
+    Chat.Of(BotBits).Say("New round will start in {0} seconds!", e.WaitTime);
+}
+```
+
+`RoundStartFailedEvent` is sent when start fails during the preparation time (`waitTime` which you set when loading `RoundsExtension`). Here is an example of how to use it to inform about missing players:
+
+```csharp
+[EventListener]
+void OnStartFailed(RoundStartFailedEvent e)
+{
+    Chat.Of(BotBits).Say("Not enough players to start new round. Waiting for more...");
+}
 ```
