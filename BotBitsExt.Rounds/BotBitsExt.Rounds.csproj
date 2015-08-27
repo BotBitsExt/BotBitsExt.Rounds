@@ -38,6 +38,12 @@
     <Reference Include="BotBits.Commands">
       <HintPath>..\packages\BotBits.Commands.1.2.2\lib\net40\BotBits.Commands.dll</HintPath>
     </Reference>
+    <Reference Include="BotBits.ChatExtras">
+      <HintPath>..\packages\BotBits.ChatExtras.1.1.2\lib\net40\BotBits.ChatExtras.dll</HintPath>
+    </Reference>
+    <Reference Include="BotBits.Permissions">
+      <HintPath>..\packages\BotBits.Permissions.1.1.4\lib\net40\BotBits.Permissions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -49,9 +55,9 @@
     <Compile Include="PlayerExtensions.cs" />
     <Compile Include="Events\JoinRoundEvent.cs" />
     <Compile Include="Events\LeaveRoundEvent.cs" />
-    <Compile Include="FinishRoundData\IFinishRoundData.cs" />
     <Compile Include="Events\StartingRoundEvent.cs" />
     <Compile Include="Events\RoundStartFailedEvent.cs" />
+    <Compile Include="Commands.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -59,6 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Events\" />
-    <Folder Include="FinishRoundData\" />
+    <Folder Include="Commands\" />
   </ItemGroup>
 </Project>
