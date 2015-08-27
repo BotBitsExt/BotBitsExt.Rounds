@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CCD22A97-4697-49E4-AC7B-E57D9B945222}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>BotBitsExt.Rounds</RootNamespace>
+    <AssemblyName>BotBitsExt.Rounds</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="PlayerIOClient">
+      <HintPath>..\packages\PlayerIOClient-Signed.3.2.364\lib\PlayerIOClient.dll</HintPath>
+    </Reference>
+    <Reference Include="BotBits">
+      <HintPath>..\packages\BotBits.1.5.10\lib\net40\BotBits.dll</HintPath>
+    </Reference>
+    <Reference Include="BotBits.Commands">
+      <HintPath>..\packages\BotBits.Commands.1.2.2\lib\net40\BotBits.Commands.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoundsExtension.cs" />
+    <Compile Include="RoundsManager.cs" />
+    <Compile Include="Events\StartRoundEvent.cs" />
+    <Compile Include="Events\StopRoundEvent.cs" />
+    <Compile Include="RoundPlayers.cs" />
+    <Compile Include="PlayerExtensions.cs" />
+    <Compile Include="Events\JoinRoundEvent.cs" />
+    <Compile Include="Events\LeaveRoundEvent.cs" />
+    <Compile Include="FinishRoundData\IFinishRoundData.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Events\" />
+    <Folder Include="FinishRoundData\" />
+  </ItemGroup>
+</Project>
