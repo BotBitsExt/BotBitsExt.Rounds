@@ -135,10 +135,7 @@ namespace BotBitsExt.Rounds
         public void ForceStart()
         {
             // Stop already running round
-            if (Running)
-            {
-                ForceStop();
-            }
+            ForceStop(false);
 
             Running = true;
             players.AddAllToRound();
@@ -148,7 +145,8 @@ namespace BotBitsExt.Rounds
         /// <summary>
         /// Forces the stop of currently running round.
         /// </summary>
-        public void ForceStop()
+        /// <param name="restart">Tells whether new round should start after stopping.</param>>
+        public void ForceStop(bool restart = true)
         {
             if (!Running)
             {
@@ -163,7 +161,8 @@ namespace BotBitsExt.Rounds
             players.RemoveAllFromRound();
             new StopRoundEvent().RaiseIn(BotBits);
 
-            CheckGameStart();
+            if (restart)
+                CheckGameStart();
         }
     }
 }
