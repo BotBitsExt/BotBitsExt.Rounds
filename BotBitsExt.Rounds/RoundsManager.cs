@@ -11,7 +11,6 @@ namespace BotBitsExt.Rounds
     {
         private RoundPlayers players;
         private CancellationTokenSource cts = new CancellationTokenSource();
-        private bool starting;
 
         public RoundsManager()
         {
@@ -67,7 +66,7 @@ namespace BotBitsExt.Rounds
                         ForceStop();
                     }
 
-                    if (starting)
+                    if (Starting)
                     {
                         cts.Cancel();
                     }
@@ -80,6 +79,12 @@ namespace BotBitsExt.Rounds
         /// </summary>
         /// <value><c>true</c> if running; otherwise, <c>false</c>.</value>
         public bool Running { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether new round is starting.
+        /// </summary>
+        /// <value><c>true</c> if new round is starting; otherwise, <c>false</c>.</value>
+        public bool Starting { get; private set; }
 
         [EventListener]
         private void OnJoin(JoinEvent e)
@@ -96,19 +101,27 @@ namespace BotBitsExt.Rounds
 
         private async void CheckGameStart()
         {
-            if (!Running && Enabled && players.Potential.Length >= MinimumPlayers)
+            if (!Running && !Starting && Enabled && players.Potential.Length >= MinimumPlayers)
             {
                 if (WaitTime > 0)
                 {
+                    // Notify about new starting round
+                    new StartingRoundEvent(WaitTime).RaiseIn(BotBits);
+
                     try
                     {
-                        starting = true;
+                        Starting = true;
                         await Task.Delay(WaitTime * 1000, cts.Token);
-                        starting = false;
                     }
                     catch (TaskCanceledException)
                     {
+                        // Notify about start fail
+                        new RoundStartFailedEvent().RaiseIn(BotBits);
                         return;
+                    }
+                    finally
+                    {
+                        Starting = false;
                     }
                 }
 
@@ -138,7 +151,13 @@ namespace BotBitsExt.Rounds
         public void ForceStop()
         {
             if (!Running)
+            {
+                // Cancel starting round
+                cts.Cancel();
+                cts = new CancellationTokenSource();
+
                 return;
+            }
 
             Running = false;
             players.RemoveAllFromRound();

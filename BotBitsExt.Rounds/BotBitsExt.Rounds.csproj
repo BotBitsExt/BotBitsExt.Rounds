@@ -50,6 +50,8 @@
     <Compile Include="Events\JoinRoundEvent.cs" />
     <Compile Include="Events\LeaveRoundEvent.cs" />
     <Compile Include="FinishRoundData\IFinishRoundData.cs" />
+    <Compile Include="Events\StartingRoundEvent.cs" />
+    <Compile Include="Events\RoundStartFailedEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

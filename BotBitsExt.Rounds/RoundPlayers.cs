@@ -91,23 +91,31 @@ namespace BotBitsExt.Rounds
         [EventListener]
         private void OnLeaveRound(LeaveRoundEvent e)
         {
-            if (Playing.Length < roundsManager.MinimumPlayers && roundsManager.Running)
-            {
-                RoundsManager.Of(BotBits).ForceStop();
-            }
+            RemovePlayerFromRound(e.Player);
         }
 
         [EventListener]
         private void OnFly(FlyEvent e)
         {
             if (e.Flying && !roundsManager.FlyingPlayersCanPlay)
-                e.Player.RemoveFromRound();
+                RemovePlayerFromRound(e.Player);
         }
 
         [EventListener]
         private void OnLeave(LeaveEvent e)
         {
-            e.Player.RemoveFromRound();
+            RemovePlayerFromRound(e.Player);
+        }
+
+        private void RemovePlayerFromRound(Player player)
+        {
+            player.RemoveFromRound();
+
+            if (Playing.Length < roundsManager.MinimumPlayers &&
+                (roundsManager.Running || roundsManager.Starting))
+            {
+                RoundsManager.Of(BotBits).ForceStop();
+            }
         }
     }
 }
