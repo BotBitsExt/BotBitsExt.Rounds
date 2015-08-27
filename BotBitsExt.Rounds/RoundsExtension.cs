@@ -27,9 +27,12 @@ namespace BotBitsExt.Rounds
             RoundsManager.Of(client).FlyingPlayersCanPlay = settings.FlyingPlayersCanPlay;
         }
 
-        public static bool LoadInto(BotBitsClient client, int minimumPlayers, int waitTime)
+        public static bool LoadInto(BotBitsClient client,
+            int minimumPlayers,
+            int waitTime,
+            bool flyingPlayersCanPlay = false)
         {
-            return LoadInto(client, new Settings(minimumPlayers, waitTime));
+            return LoadInto(client, new Settings(minimumPlayers, waitTime, flyingPlayersCanPlay));
         }
     }
 }
