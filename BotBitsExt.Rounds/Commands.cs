@@ -36,8 +36,15 @@ namespace BotBitsExt.Rounds
         {
             RequireModerator(source);
 
-            source.Reply("Starting new round...");
-            roundsManager.ForceStart();
+            if (!roundsManager.Enabled)
+            {
+                source.Reply("Bot is not enabled!");
+            }
+            else
+            {
+                source.Reply("Starting new round...");
+                roundsManager.ForceStart();
+            }
         }
 
         [Command(0, "stop")]
@@ -45,8 +52,15 @@ namespace BotBitsExt.Rounds
         {
             RequireModerator(source);
 
-            source.Reply("Stopping round...");
-            roundsManager.ForceStop();
+            if (!roundsManager.Enabled)
+            {
+                source.Reply("Bot is not enabled!");
+            }
+            else
+            {
+                source.Reply("Stopping round...");
+                roundsManager.ForceStop();
+            }
         }
 
         [Command(0, "on")]

@@ -65,11 +65,6 @@ namespace BotBitsExt.Rounds
                     {
                         ForceStop();
                     }
-
-                    if (Starting)
-                    {
-                        cts.Cancel();
-                    }
                 }
             }
         }
@@ -134,6 +129,9 @@ namespace BotBitsExt.Rounds
         /// </summary>
         public void ForceStart()
         {
+            if (!Enabled)
+                return;
+
             // Stop already running round
             ForceStop(false);
 
