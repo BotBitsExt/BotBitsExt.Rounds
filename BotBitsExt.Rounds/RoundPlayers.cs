@@ -89,12 +89,6 @@ namespace BotBitsExt.Rounds
         }
 
         [EventListener]
-        private void OnLeaveRound(LeaveRoundEvent e)
-        {
-            RemovePlayerFromRound(e.Player);
-        }
-
-        [EventListener]
         private void OnFly(FlyEvent e)
         {
             if (e.Flying && !roundsManager.FlyingPlayersCanPlay)
