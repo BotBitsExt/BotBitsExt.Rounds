@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BotBits;
 using BotBits.Events;
+using BotBitsExt.Afk;
 using BotBitsExt.Rounds.Events;
 
 namespace BotBitsExt.Rounds
@@ -21,55 +21,43 @@ namespace BotBitsExt.Rounds
         }
 
         /// <summary>
-        /// Gets the playing players.
+        ///     Gets the playing players.
         /// </summary>
         /// <value>The playing players.</value>
-        public Player[] Playing
-        {
-            get
-            {
-                return (from player in players
-                                    where player.IsPlaying()
-                                    select player)
-                        .ToArray();
-            }
-        }
+        public Player[] Playing => (from player in players
+            where player.IsPlaying()
+            select player)
+            .ToArray();
 
         /// <summary>
-        /// Gets the players that can join new round.
+        ///     Gets the players that can join new round.
         /// </summary>
         /// <value>The players that can join new round.</value>
-        public Player[] Potential
-        {
-            get
-            {
-                return (from player in players
-                                    where (!player.Flying || roundsManager.FlyingPlayersCanPlay)
-                                        && player != players.OwnPlayer
-                                    select player)
-                        .ToArray();
-            }
-        }
+        public Player[] Potential => (from player in players
+            where (!player.Flying || roundsManager.FlyingPlayersCanPlay)
+                  && player != players.OwnPlayer
+                  && !player.IsAfk()
+            select player)
+            .ToArray();
 
         [EventListener]
         private void OnJoin(JoinEvent e)
         {
             e.Player.MetadataChanged += (sender, ev) =>
+            {
+                if (ev.Key != PlayerExtensions.Playing) return;
+
+                if ((bool) ev.NewValue)
                 {
-                    if (ev.Key == PlayerExtensions.Playing)
-                    {
-                        if ((bool)ev.NewValue)
-                        {
-                            new JoinRoundEvent(e.Player)
-                                .RaiseIn(BotBits);
-                        }
-                        else
-                        {
-                            new LeaveRoundEvent(e.Player)
-                                .RaiseIn(BotBits);
-                        }
-                    }
-                };
+                    new JoinRoundEvent(e.Player)
+                        .RaiseIn(BotBits);
+                }
+                else
+                {
+                    new LeaveRoundEvent(e.Player)
+                        .RaiseIn(BotBits);
+                }
+            };
         }
 
         internal void AddAllToRound()
@@ -77,6 +65,11 @@ namespace BotBitsExt.Rounds
             foreach (var player in Potential)
             {
                 player.AddToRound();
+            }
+
+            if (AfkExtension.IsLoadedInto(BotBits))
+            {
+                AfkService.Of(BotBits).ResetAutoAfk();
             }
         }
 
@@ -113,4 +106,3 @@ namespace BotBitsExt.Rounds
         }
     }
 }
-

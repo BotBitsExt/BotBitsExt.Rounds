@@ -1,5 +1,4 @@
-﻿using System;
-using BotBits;
+﻿using BotBits;
 
 namespace BotBitsExt.Rounds.Events
 {
@@ -11,12 +10,11 @@ namespace BotBitsExt.Rounds.Events
         }
 
         /// <summary>
-        /// Gets a value indicating whether there were enough players to start new round.
-        /// If it's set to false it means that round start was stopped because eligble
-        /// players left the world.
+        ///     Gets a value indicating whether there were enough players to start new round.
+        ///     If it's set to false it means that round start was stopped because eligble
+        ///     players left the world.
         /// </summary>
         /// <value><c>true</c> if there were enough players; otherwise, <c>false</c>.</value>
         public bool EnoughPlayers { get; private set; }
     }
 }
-

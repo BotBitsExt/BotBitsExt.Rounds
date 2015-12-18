@@ -1,5 +1,4 @@
-﻿using System;
-using BotBits;
+﻿using BotBits;
 
 namespace BotBitsExt.Rounds.Events
 {
@@ -13,4 +12,3 @@ namespace BotBitsExt.Rounds.Events
         public int WaitTime { get; private set; }
     }
 }
-

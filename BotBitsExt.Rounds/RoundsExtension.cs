@@ -1,27 +1,12 @@
-﻿using System;
-using BotBits;
+﻿using BotBits;
 
 namespace BotBitsExt.Rounds
 {
     public sealed class RoundsExtension : Extension<RoundsExtension>
     {
-        private class Settings
-        {
-            public int MinimumPlayers { get; private set; }
-            public int WaitTime { get; private set; }
-            public bool FlyingPlayersCanPlay { get; private set; }
-
-            public Settings(int minimumPlayers, int waitTime, bool flyingPlayersCanPlay = false)
-            {
-                MinimumPlayers = minimumPlayers;
-                WaitTime = waitTime;
-                FlyingPlayersCanPlay = flyingPlayersCanPlay;
-            }
-        }
-
         protected override void Initialize(BotBitsClient client, object args)
         {
-            var settings = (Settings)args;
+            var settings = (Settings) args;
             RoundsManager.Of(client).MinimumPlayers = settings.MinimumPlayers;
             RoundsManager.Of(client).WaitTime = settings.WaitTime;
             RoundsManager.Of(client).FlyingPlayersCanPlay = settings.FlyingPlayersCanPlay;
@@ -34,6 +19,19 @@ namespace BotBitsExt.Rounds
         {
             return LoadInto(client, new Settings(minimumPlayers, waitTime, flyingPlayersCanPlay));
         }
+
+        private class Settings
+        {
+            public Settings(int minimumPlayers, int waitTime, bool flyingPlayersCanPlay = false)
+            {
+                MinimumPlayers = minimumPlayers;
+                WaitTime = waitTime;
+                FlyingPlayersCanPlay = flyingPlayersCanPlay;
+            }
+
+            public int MinimumPlayers { get; }
+            public int WaitTime { get; }
+            public bool FlyingPlayersCanPlay { get; }
+        }
     }
 }
-

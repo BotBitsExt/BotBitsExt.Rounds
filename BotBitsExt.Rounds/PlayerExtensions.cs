@@ -1,14 +1,13 @@
-﻿using System;
-using BotBits;
+﻿using BotBits;
 
 namespace BotBitsExt.Rounds
 {
     public static class PlayerExtensions
     {
-        internal static string Playing = "Playing";
+        internal const string Playing = "Playing";
 
         /// <summary>
-        /// Determines if the specified player is playing.
+        ///     Determines if the specified player is playing.
         /// </summary>
         /// <returns><c>true</c> if the specified player is playing; otherwise, <c>false</c>.</returns>
         /// <param name="player">Player.</param>
@@ -18,7 +17,7 @@ namespace BotBitsExt.Rounds
         }
 
         /// <summary>
-        /// Adds the specified player to round.
+        ///     Adds the specified player to round.
         /// </summary>
         /// <param name="player">Player.</param>
         public static void AddToRound(this Player player)
@@ -28,7 +27,7 @@ namespace BotBitsExt.Rounds
         }
 
         /// <summary>
-        /// Removes the specified player from round.
+        ///     Removes the specified player from round.
         /// </summary>
         /// <param name="player">Player.</param>
         public static void RemoveFromRound(this Player player)
@@ -38,4 +37,3 @@ namespace BotBitsExt.Rounds
         }
     }
 }
-

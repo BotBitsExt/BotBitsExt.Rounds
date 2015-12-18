@@ -1,5 +1,4 @@
-﻿using System;
-using BotBits;
+﻿using BotBits;
 using BotBits.Commands;
 using BotBits.Permissions;
 
@@ -7,8 +6,8 @@ namespace BotBitsExt.Rounds
 {
     internal sealed class Commands : Package<Commands>
     {
-        private RoundsManager roundsManager;
         private bool requireModerator;
+        private RoundsManager roundsManager;
 
         public Commands()
         {
@@ -16,12 +15,11 @@ namespace BotBitsExt.Rounds
             {
                 roundsManager = RoundsManager.Of(BotBits);
 
-                if (CommandsExtension.IsLoadedInto(BotBits))
-                {
-                    CommandLoader.Of(BotBits).Load(this);
+                if (!CommandsExtension.IsLoadedInto(BotBits)) return;
 
-                    requireModerator = PermissionsExtension.IsLoadedInto(BotBits);
-                }
+                CommandLoader.Of(BotBits).Load(this);
+
+                requireModerator = PermissionsExtension.IsLoadedInto(BotBits);
             };
         }
 
@@ -96,4 +94,3 @@ namespace BotBitsExt.Rounds
         }
     }
 }
-
