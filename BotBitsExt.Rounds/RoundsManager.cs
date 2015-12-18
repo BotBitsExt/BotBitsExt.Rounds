@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BotBits;
 using BotBits.Events;
+using BotBitsExt.Afk.Events;
 using BotBitsExt.Rounds.Events;
 
 namespace BotBitsExt.Rounds
@@ -87,6 +88,26 @@ namespace BotBitsExt.Rounds
         private void OnFly(FlyEvent e)
         {
             if (!e.Flying && !FlyingPlayersCanPlay)
+                CheckGameStart();
+        }
+
+        [EventListener]
+        private void On(MoveEvent e)
+        {
+            CheckGameStart();
+        }
+
+        [EventListener]
+        private void On(AfkEvent e)
+        {
+            if (!e.Afk)
+                CheckGameStart();
+        }
+
+        [EventListener]
+        private void On(AutoAfkEvent e)
+        {
+            if (!e.AutoAfk)
                 CheckGameStart();
         }
 
