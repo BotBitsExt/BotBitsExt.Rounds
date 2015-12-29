@@ -3,6 +3,7 @@ using BotBits;
 using BotBits.Events;
 using BotBitsExt.Afk;
 using BotBitsExt.Rounds.Events;
+using JetBrains.Annotations;
 
 namespace BotBitsExt.Rounds
 {
@@ -24,6 +25,7 @@ namespace BotBitsExt.Rounds
         ///     Gets the playing players.
         /// </summary>
         /// <value>The playing players.</value>
+        [UsedImplicitly]
         public Player[] Playing => (from player in players
             where player.IsPlaying()
             select player)
@@ -37,6 +39,7 @@ namespace BotBitsExt.Rounds
             where (!player.Flying || roundsManager.FlyingPlayersCanPlay)
                   && player != players.OwnPlayer
                   && !player.IsAfk()
+                  && player.CanPlay()
             select player)
             .ToArray();
 
@@ -45,17 +48,24 @@ namespace BotBitsExt.Rounds
         {
             e.Player.MetadataChanged += (sender, ev) =>
             {
-                if (ev.Key != PlayerExtensions.Playing) return;
+                switch (ev.Key)
+                {
+                    case PlayerExtensions.PlayingMetadata:
+                        if ((bool) ev.NewValue)
+                        {
+                            new JoinRoundEvent(e.Player)
+                                .RaiseIn(BotBits);
+                        }
+                        else
+                        {
+                            new LeaveRoundEvent(e.Player)
+                                .RaiseIn(BotBits);
+                        }
+                        break;
 
-                if ((bool) ev.NewValue)
-                {
-                    new JoinRoundEvent(e.Player)
-                        .RaiseIn(BotBits);
-                }
-                else
-                {
-                    new LeaveRoundEvent(e.Player)
-                        .RaiseIn(BotBits);
+                    case PlayerExtensions.CanPlayMetadata:
+                        new CanPlayEvent(e.Player, (bool) ev.NewValue).RaiseIn(BotBits);
+                        break;
                 }
             };
         }
