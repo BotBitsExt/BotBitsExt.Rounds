@@ -8,6 +8,9 @@ using JetBrains.Annotations;
 
 namespace BotBitsExt.Rounds
 {
+    /// <summary>
+    ///     The rounds manager. Used to control round starting and stopping.
+    /// </summary>
     public sealed class RoundsManager : EventListenerPackage<RoundsManager>
     {
         private CancellationTokenSource cts = new CancellationTokenSource();
@@ -54,7 +57,7 @@ namespace BotBitsExt.Rounds
                 {
                     if (!Running)
                     {
-                        CheckGameStart();
+                        CheckRoundStart();
                     }
                 }
                 else
@@ -79,40 +82,42 @@ namespace BotBitsExt.Rounds
         /// <value><c>true</c> if new round is starting; otherwise, <c>false</c>.</value>
         public bool Starting { get; private set; }
 
+        #region Round start checking
+
         [EventListener]
         private void OnJoin(JoinEvent e)
         {
-            CheckGameStart();
+            CheckRoundStart();
         }
 
         [EventListener]
         private void OnFly(FlyEvent e)
         {
             if (!e.Flying && !FlyingPlayersCanPlay)
-                CheckGameStart();
+                CheckRoundStart();
         }
 
         [EventListener]
         private void On(MoveEvent e)
         {
-            CheckGameStart();
+            CheckRoundStart();
         }
 
         [EventListener]
         private void On(AfkEvent e)
         {
             if (!e.Afk)
-                CheckGameStart();
+                CheckRoundStart();
         }
 
         [EventListener]
         private void On(AutoAfkEvent e)
         {
             if (!e.AutoAfk)
-                CheckGameStart();
+                CheckRoundStart();
         }
 
-        private async void CheckGameStart()
+        private async void CheckRoundStart()
         {
             if (Running || Starting || !Enabled || players.Potential.Length < MinimumPlayers) return;
 
@@ -140,6 +145,8 @@ namespace BotBitsExt.Rounds
 
             ForceStart();
         }
+
+        #endregion
 
         /// <summary>
         ///     Forces the start of new round.
@@ -175,7 +182,7 @@ namespace BotBitsExt.Rounds
                 cts = new CancellationTokenSource();
 
                 if (restart)
-                    CheckGameStart();
+                    CheckRoundStart();
 
                 return;
             }
@@ -187,7 +194,7 @@ namespace BotBitsExt.Rounds
             new StopRoundEvent(leftPlayers).RaiseIn(BotBits);
 
             if (restart)
-                CheckGameStart();
+                CheckRoundStart();
         }
     }
 }

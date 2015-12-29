@@ -7,6 +7,9 @@ using JetBrains.Annotations;
 
 namespace BotBitsExt.Rounds
 {
+    /// <summary>
+    ///     Round players controller.
+    /// </summary>
     public sealed class RoundPlayers : EventListenerPackage<RoundPlayers>
     {
         private Players players;

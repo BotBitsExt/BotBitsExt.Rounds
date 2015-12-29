@@ -15,7 +15,8 @@ namespace BotBitsExt.Rounds
             {
                 roundsManager = RoundsManager.Of(BotBits);
 
-                if (!CommandsExtension.IsLoadedInto(BotBits)) return;
+                if (!CommandsExtension.IsLoadedInto(BotBits))
+                    return;
 
                 CommandLoader.Of(BotBits).Load(this);
 
