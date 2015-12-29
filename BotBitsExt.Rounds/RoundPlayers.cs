@@ -49,6 +49,8 @@ namespace BotBitsExt.Rounds
         [EventListener]
         private void OnJoin(JoinEvent e)
         {
+            e.Player.SetCanPlay(true);
+
             e.Player.MetadataChanged += (sender, ev) =>
             {
                 switch (ev.Key)
