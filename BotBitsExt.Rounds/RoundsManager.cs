@@ -4,13 +4,14 @@ using BotBits;
 using BotBits.Events;
 using BotBitsExt.Afk.Events;
 using BotBitsExt.Rounds.Events;
+using JetBrains.Annotations;
 
 namespace BotBitsExt.Rounds
 {
     public sealed class RoundsManager : EventListenerPackage<RoundsManager>
     {
-        private bool enabled;
         private CancellationTokenSource cts = new CancellationTokenSource();
+        private bool enabled;
         private RoundPlayers players;
 
         public RoundsManager()
@@ -20,7 +21,7 @@ namespace BotBitsExt.Rounds
         }
 
         /// <summary>
-        ///     Gets or sets the amount of minimum players required to start new round.
+        ///     Gets or sets the minimum amount of players required to start new round.
         /// </summary>
         /// <value>The minimum amount of players required to start new round.</value>
         public int MinimumPlayers { get; internal set; }
@@ -29,11 +30,11 @@ namespace BotBitsExt.Rounds
         ///     Gets or sets the wait time before starting each round. (in seconds)
         /// </summary>
         /// <value>The wait time before each round.</value>
+        [UsedImplicitly]
         public int WaitTime { get; internal set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether flying players can join game.
-        ///     also play.
         /// </summary>
         /// <value><c>true</c> if flying players can join game; otherwise, <c>false</c>.</value>
         public bool FlyingPlayersCanPlay { get; internal set; }
@@ -69,7 +70,7 @@ namespace BotBitsExt.Rounds
         /// <summary>
         ///     Gets a value indicating whether round is running.
         /// </summary>
-        /// <value><c>true</c> if running; otherwise, <c>false</c>.</value>
+        /// <value><c>true</c> if round is running; otherwise, <c>false</c>.</value>
         public bool Running { get; private set; }
 
         /// <summary>
@@ -117,8 +118,8 @@ namespace BotBitsExt.Rounds
 
             if (WaitTime > 0)
             {
-                // Notify about new starting round
-                new StartingRoundEvent(WaitTime).RaiseIn(BotBits);
+                // Notify about newly starting round
+                new StartingRoundEvent(players.Potential, WaitTime).RaiseIn(BotBits);
 
                 try
                 {
@@ -127,7 +128,7 @@ namespace BotBitsExt.Rounds
                 }
                 catch (TaskCanceledException)
                 {
-                    // Notify about start fail
+                    // Notify about round start failure
                     new RoundStartFailedEvent(players.Potential.Length >= MinimumPlayers).RaiseIn(BotBits);
                     return;
                 }
@@ -153,14 +154,16 @@ namespace BotBitsExt.Rounds
 
             Running = true;
             players.AddAllToRound();
-            new StartRoundEvent().RaiseIn(BotBits);
+            new StartRoundEvent(players.Playing).RaiseIn(BotBits);
         }
 
         /// <summary>
-        ///     Forces the stop of currently running round.
+        ///     Forces the stop of the currently running round.
         /// </summary>
-        /// <param name="restart">Tells whether new round should start after stopping.</param>
-        /// >
+        /// <param name="restart">
+        ///     Tells whether new round should start after stopping currently
+        ///     running one.
+        /// </param>
         public void ForceStop(bool restart = true)
         {
             if (!Running)
@@ -178,8 +181,10 @@ namespace BotBitsExt.Rounds
             }
 
             Running = false;
+
+            var leftPlayers = players.Playing;
             players.RemoveAllFromRound();
-            new StopRoundEvent().RaiseIn(BotBits);
+            new StopRoundEvent(leftPlayers).RaiseIn(BotBits);
 
             if (restart)
                 CheckGameStart();

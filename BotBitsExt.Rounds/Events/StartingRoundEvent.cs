@@ -8,10 +8,21 @@ namespace BotBitsExt.Rounds.Events
     /// </summary>
     public sealed class StartingRoundEvent : Event<StartingRoundEvent>
     {
-        internal StartingRoundEvent(int waitTime)
+        internal StartingRoundEvent(Player[] players, int waitTime)
         {
+            Players = players;
             WaitTime = waitTime;
         }
+
+        /// <summary>
+        ///     Gets the players that would be added to the round if it started
+        ///     at the time when this event was raised.
+        /// </summary>
+        /// <value>
+        ///     The players.
+        /// </value>
+        [UsedImplicitly]
+        public Player[] Players { get; private set; }
 
         /// <summary>
         ///     Gets the number of seconds of delay before the new round will start.
