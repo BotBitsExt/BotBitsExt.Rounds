@@ -51,10 +51,15 @@ namespace BotBitsExt.Rounds
             get { return enabled; }
             set
             {
+                if (enabled == value)
+                    return;
+
                 enabled = value;
 
                 if (enabled)
                 {
+                    new EnabledEvent().RaiseIn(BotBits);
+
                     if (!Running)
                     {
                         CheckRoundStart();
@@ -62,6 +67,8 @@ namespace BotBitsExt.Rounds
                 }
                 else
                 {
+                    new DisabledEvent().RaiseIn(BotBits);
+
                     if (Running)
                     {
                         ForceStop();
@@ -81,6 +88,55 @@ namespace BotBitsExt.Rounds
         /// </summary>
         /// <value><c>true</c> if new round is starting; otherwise, <c>false</c>.</value>
         public bool Starting { get; private set; }
+
+        /// <summary>
+        ///     Forces the start of new round.
+        /// </summary>
+        public void ForceStart()
+        {
+            if (!Enabled)
+                return;
+
+            // Stop already running round
+            ForceStop(false);
+
+            Running = true;
+            players.AddAllToRound();
+            new StartRoundEvent(players.Playing).RaiseIn(BotBits);
+        }
+
+        /// <summary>
+        ///     Forces the stop of the currently running round.
+        /// </summary>
+        /// <param name="restart">
+        ///     Tells whether new round should start after stopping currently
+        ///     running one.
+        /// </param>
+        public void ForceStop(bool restart = true)
+        {
+            if (!Running)
+            {
+                if (!Starting) return;
+
+                // Cancel starting round
+                cts.Cancel();
+                cts = new CancellationTokenSource();
+
+                if (restart)
+                    CheckRoundStart();
+
+                return;
+            }
+
+            Running = false;
+
+            var leftPlayers = players.Playing;
+            players.RemoveAllFromRound();
+            new StopRoundEvent(leftPlayers).RaiseIn(BotBits);
+
+            if (restart)
+                CheckRoundStart();
+        }
 
         #region Round start checking
 
@@ -147,54 +203,5 @@ namespace BotBitsExt.Rounds
         }
 
         #endregion
-
-        /// <summary>
-        ///     Forces the start of new round.
-        /// </summary>
-        public void ForceStart()
-        {
-            if (!Enabled)
-                return;
-
-            // Stop already running round
-            ForceStop(false);
-
-            Running = true;
-            players.AddAllToRound();
-            new StartRoundEvent(players.Playing).RaiseIn(BotBits);
-        }
-
-        /// <summary>
-        ///     Forces the stop of the currently running round.
-        /// </summary>
-        /// <param name="restart">
-        ///     Tells whether new round should start after stopping currently
-        ///     running one.
-        /// </param>
-        public void ForceStop(bool restart = true)
-        {
-            if (!Running)
-            {
-                if (!Starting) return;
-
-                // Cancel starting round
-                cts.Cancel();
-                cts = new CancellationTokenSource();
-
-                if (restart)
-                    CheckRoundStart();
-
-                return;
-            }
-
-            Running = false;
-
-            var leftPlayers = players.Playing;
-            players.RemoveAllFromRound();
-            new StopRoundEvent(leftPlayers).RaiseIn(BotBits);
-
-            if (restart)
-                CheckRoundStart();
-        }
     }
 }

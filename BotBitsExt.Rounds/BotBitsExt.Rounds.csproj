@@ -59,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\CanPlayEvent.cs" />
+    <Compile Include="Events\DisabledEvent.cs" />
+    <Compile Include="Events\EnabledEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoundsExtension.cs" />
     <Compile Include="RoundsManager.cs" />

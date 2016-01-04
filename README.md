@@ -142,6 +142,11 @@ void OnStartingRound(StartingRoundEvent e)
 Raised shortly before round starts or after it finished.
 They contain `Players` property listing all the players that were playing the round.
 
+- `EnabledEvent`
+- `DisabledEvent`
+
+Raised when `RoundManager` is enabled or disabled.
+
 # <a id="commands">Commands</a>
 
 - `!start`
