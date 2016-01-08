@@ -59,20 +59,10 @@ namespace BotBitsExt.Rounds
                 if (enabled)
                 {
                     new EnabledEvent().RaiseIn(BotBits);
-
-                    if (!Running)
-                    {
-                        CheckRoundStart();
-                    }
                 }
                 else
                 {
                     new DisabledEvent().RaiseIn(BotBits);
-
-                    if (Running)
-                    {
-                        ForceStop();
-                    }
                 }
             }
         }
@@ -138,16 +128,16 @@ namespace BotBitsExt.Rounds
                 CheckRoundStart();
         }
 
-        #region Round start checking
+        #region Round start/stop checking
 
         [EventListener]
-        private void OnJoin(JoinEvent e)
+        private void On(JoinEvent e)
         {
             CheckRoundStart();
         }
 
         [EventListener]
-        private void OnFly(FlyEvent e)
+        private void On(FlyEvent e)
         {
             if (!e.Flying && !FlyingPlayersCanPlay)
                 CheckRoundStart();
@@ -171,6 +161,24 @@ namespace BotBitsExt.Rounds
         {
             if (!e.AutoAfk)
                 CheckRoundStart();
+        }
+
+        [EventListener]
+        private void On(EnabledEvent e)
+        {
+            if (!Running)
+            {
+                CheckRoundStart();
+            }
+        }
+
+        [EventListener]
+        private void On(DisabledEvent e)
+        {
+            if (Running)
+            {
+                ForceStop(false);
+            }
         }
 
         private async void CheckRoundStart()
