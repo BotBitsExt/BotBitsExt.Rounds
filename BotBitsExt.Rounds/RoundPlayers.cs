@@ -2,6 +2,7 @@
 using BotBits;
 using BotBits.Events;
 using BotBitsExt.Afk;
+using BotBitsExt.Afk.Events;
 using BotBitsExt.Rounds.Events;
 using JetBrains.Annotations;
 
@@ -47,7 +48,7 @@ namespace BotBitsExt.Rounds
             .ToArray();
 
         [EventListener]
-        private void OnJoin(JoinEvent e)
+        private void On(JoinEvent e)
         {
             e.Player.SetCanPlay(true);
 
@@ -97,16 +98,23 @@ namespace BotBitsExt.Rounds
         }
 
         [EventListener]
-        private void OnFly(FlyEvent e)
+        private void On(FlyEvent e)
         {
             if (e.Flying && !roundsManager.FlyingPlayersCanPlay)
                 RemovePlayerFromRound(e.Player);
         }
 
         [EventListener]
-        private void OnLeave(LeaveEvent e)
+        private void On(LeaveEvent e)
         {
             RemovePlayerFromRound(e.Player);
+        }
+
+        [EventListener]
+        private void On(AfkEvent e)
+        {
+            if (e.Afk)
+                RemovePlayerFromRound(e.Player);
         }
 
         private void RemovePlayerFromRound(Player player)
