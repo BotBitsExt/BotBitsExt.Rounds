@@ -29,7 +29,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BotBits, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8d4a7b115348c43d, processorArchitecture=MSIL">
-      <HintPath>..\packages\BotBits.1.6.14\lib\net40\BotBits.dll</HintPath>
+      <HintPath>..\packages\BotBits.204.1.1\lib\net40\BotBits.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="BotBits.Commands, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -37,7 +37,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="BotBits.Permissions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BotBits.Permissions.1.1.7\lib\net40\BotBits.Permissions.dll</HintPath>
+      <HintPath>..\packages\BotBits.Permissions.2.0.0\lib\net40\BotBits.Permissions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="BotBitsExt.Afk, Version=1.0.5726.22452, Culture=neutral, processorArchitecture=MSIL">
