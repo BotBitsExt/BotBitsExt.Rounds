@@ -121,8 +121,8 @@ namespace BotBitsExt.Rounds
         {
             player.RemoveFromRound();
 
-            if (Playing.Length < roundsManager.MinimumPlayers &&
-                (roundsManager.Running || roundsManager.Starting))
+            if (Playing.Length < roundsManager.MinimumPlayers && roundsManager.Running ||
+                Potential.Length < roundsManager.MinimumPlayers && roundsManager.Starting)
             {
                 RoundsManager.Of(BotBits).ForceStop();
             }
